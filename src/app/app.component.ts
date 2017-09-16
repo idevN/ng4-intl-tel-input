@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { LowerCasePipe } from '@angular/common';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +7,11 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'app works!';
+  status: string = '';
+  title = 'International Number Input';
+
+  onChange(status: boolean) {
+    status ? this.status = 'Valid' : this.status = 'Invalid'; 
+  }
+
 }

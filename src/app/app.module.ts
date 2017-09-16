@@ -4,10 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
+import { IntlTelInputComponent } from './intl-tel-input/intl-tel-input.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    IntlTelInputComponent
   ],
   imports: [
     BrowserModule,
