@@ -12,30 +12,45 @@ declare const intlTelInputUtils: any;
 })
 
 export class IntlTelInputComponent implements OnInit {
-	numberType: any;
+	
 	value: string;
-	isValid: boolean;	
-	@Output() change: EventEmitter<any> = new EventEmitter();
+	status: boolean;	
+	inputElement: string = '#phone'; // set this here to keep code maintainable
+	initialCountryCode: string;
+
+	@Output() change: EventEmitter<any> = new EventEmitter();	
 
 	constructor() { }
 
 	ngOnInit() {
-		$('#phone').intlTelInput({
+		// initialize intl-tel-input plugin
+		this.intlTelInputInit();
+		// add event listener to input element
+		document.querySelector(this.inputElement).addEventListener('keyup', () => this.onValueChange());
+		
+	}
+
+	// function that will init intl-tel-input plugin
+	intlTelInputInit() {
+		$(this.inputElement).intlTelInput({
 			geoIpLookup: function (callback) {
 				$.get("http://ipinfo.io", function () { }, "jsonp").always(function (resp) {
 					var countryCode = (resp && resp.country) ? resp.country : "";
 					callback(countryCode);
+					this.initialCountryCode = countryCode;					
 				});
 			},
-			initialCountry: "auto", // note #1: initialCountry 
+			initialCountry: "auto", 
 			utilsScript: '/node_modules/intl-tel-input/build/js/utils.js'
-		});		
+		});	
 	}
 
 	onValueChange() {
-		this.value = $("#phone").intlTelInput("getNumber");
-		this.isValid = $("#phone").intlTelInput("isValidNumber")
-		this.change.emit(this.isValid);	
+		this.value = $(this.inputElement).intlTelInput("getNumber");
+		this.status = $(this.inputElement).intlTelInput("isValidNumber");
+		// event emitter on value change
+		this.change.emit(this.status);	
 	}
 
 }
+
